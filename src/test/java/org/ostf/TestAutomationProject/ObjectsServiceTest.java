@@ -30,9 +30,29 @@ public class ObjectsServiceTest {
         logger.debug("Data body : " + response.body().prettyPrint());
         Assert.assertEquals(response.getStatusCode(), 200);
 
-        // Additional assertions based on response content
     }
 
+
+
+    @Test
+    public void testGetAllApplePhones() {
+        List<Map<String, Object>> jsonData = loadJsonData();
+        List<String> applePhoneNames = jsonData.stream()
+                .map(obj -> (String) obj.get("name"))
+                // TODO this filter needs to be added to Phone Object Model
+                .filter(name -> name.startsWith("Apple iPhone"))
+                .toList();
+
+        applePhoneNames.forEach(name -> logger.info("Apple Phone: {}", name));
+        Assert.assertFalse(applePhoneNames.isEmpty(), "There should be at least one Apple phone.");
+    }
+
+
+    private List<Map<String, Object>> loadJsonData() {
+        Response response = objectsService.getAllObjects();
+        List<Map<String, Object>> jsonData = response.jsonPath().getList("$");
+        return jsonData;
+    }
 
     /*
     @Test

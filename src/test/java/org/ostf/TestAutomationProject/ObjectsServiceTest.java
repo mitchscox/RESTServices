@@ -22,6 +22,8 @@ public class ObjectsServiceTest {
     }
     // TODO remove additional assertion comments when done with validation logic
     // TODO configure hardcoding of string ids from 1 to phone object model
+    // TODO get logging into surefire test reports
+    // TODO move response retrival and json parsing to setup function
     @Test
     public void testGetAllObjects() {
         Response response = objectsService.getAllObjects();
@@ -72,7 +74,21 @@ public class ObjectsServiceTest {
 
         Assert.assertTrue(lowestPricePhone.isPresent(), "There should be at least one phone with a price.");
     }
+    @Test
+    public void testAllIdsAreNotNull() {
+        // Get the response
+        Response response = objectsService.getAllObjects();
 
+        // Convert response to JSON data
+        List<Map<String, Object>> jsonData = response.jsonPath().getList("$");
+
+        boolean allIdsNotNull = jsonData.stream()
+                .allMatch(obj -> obj.get("id") != null);
+
+        logger.info("All IDs are non-null: {}", allIdsNotNull);
+
+        Assert.assertTrue(allIdsNotNull, "All ID fields should be non-null.");
+    }
     /*
     @Test
     public void testGetObjectById() {

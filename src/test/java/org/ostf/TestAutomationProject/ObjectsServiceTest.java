@@ -6,8 +6,11 @@ import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ObjectsServiceTest {
@@ -27,7 +30,7 @@ public class ObjectsServiceTest {
         logger.debug("Object Data Type : " + response.getContentType());
 
         // why is this below logger statement printing to info and above?
-        logger.debug("Data body : " + response.body().prettyPrint());
+        // logger.debug("Data body : " + response.body().prettyPrint());
         Assert.assertEquals(response.getStatusCode(), 200);
 
     }
@@ -52,6 +55,23 @@ public class ObjectsServiceTest {
         Response response = objectsService.getAllObjects();
         List<Map<String, Object>> jsonData = response.jsonPath().getList("$");
         return jsonData;
+    }
+    @Test
+    public void testGetPhoneWithLowestPrice() {
+        // Get the response
+        Response response = objectsService.getAllObjects();
+
+        // Convert response to JSON data
+        List<Map<String, Object>> jsonData = response.jsonPath().getList("$");
+
+        Optional<String> lowestPricePhone = jsonData.stream()
+                .filter(obj -> obj.get("data") != null && ((Map<String, Object>) obj.get("data")).get("price") != null)
+                .min(Comparator.comparing(obj -> ((Number) ((Map<String, Object>) obj.get("data")).get("price")).doubleValue()))
+                .map(obj -> (String) obj.get("name"));
+
+        lowestPricePhone.ifPresent(name -> logger.info("Lowest Price Device: {}", name));
+
+        Assert.assertTrue(lowestPricePhone.isPresent(), "There should be at least one phone with a price.");
     }
 
     /*

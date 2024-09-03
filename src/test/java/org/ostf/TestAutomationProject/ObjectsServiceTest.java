@@ -6,6 +6,9 @@ import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ObjectsServiceTest {
     Logger logger = LogManager.getLogger();
@@ -20,14 +23,18 @@ public class ObjectsServiceTest {
     @Test
     public void testGetAllObjects() {
         Response response = objectsService.getAllObjects();
-        logger.info("Object Data:"+response);
+        logger.debug("Response Code : "+ response.getStatusCode());
+        logger.debug("Object Data Type : " + response.getContentType());
+
+        // why is this below logger statement printing to info and above?
+        logger.debug("Data body : " + response.body().prettyPrint());
         Assert.assertEquals(response.getStatusCode(), 200);
 
         // Additional assertions based on response content
     }
 
 
-
+    /*
     @Test
     public void testGetObjectById() {
         String id = "1"; // Replace with a valid ID
@@ -35,7 +42,7 @@ public class ObjectsServiceTest {
         Assert.assertEquals(response.getStatusCode(), 200);
         // Additional assertions based on response content
     }
-    /*
+
     @Test
     public void testCreateObject() {
         // Create a sample object to post

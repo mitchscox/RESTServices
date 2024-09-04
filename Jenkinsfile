@@ -21,5 +21,11 @@ pipeline {
       }
     }
 
+    stage('Clean Validate Compile') {
+      steps {
+        sh 'mvn clean validate compile'
+      }
+    }
+
   }
 }

@@ -120,7 +120,7 @@ public class ObjectsServiceTest {
         String updatedObject = "{ \"name\": \"Updated Object\", \"data\": { \"property\": \"new value\" }}";
         Response response = objectsService.updateObject(id, updatedObject);
         Assert.assertEquals(response.getStatusCode(), 200);
-        // Additional assertions based on response content
+
     }
 
     @Test
@@ -128,8 +128,7 @@ public class ObjectsServiceTest {
         String id = "1"; // Replace with a valid ID
         Response response = objectsService.deleteObject(id);
         Assert.assertEquals(response.getStatusCode(), 200);
-        // Additional assertions based on response content
-    }
 
+    }
 
 }

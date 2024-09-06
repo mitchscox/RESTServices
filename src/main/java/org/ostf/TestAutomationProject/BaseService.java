@@ -3,17 +3,21 @@ package org.ostf.TestAutomationProject;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 
+@Service
 public class BaseService {
-    /* TODO make endpoint URl configurable https://api.restful-api.dev/ vs http://localhost:80/ */
 
-    private final String baseUrl = "https://api.restful-api.dev/";
-    //private final String baseUrl = "http://localhost:80/";
-    public BaseService() {
-        RestAssured.baseURI = baseUrl;
+    Logger logger = LogManager.getLogger();
+
+    public BaseService(@Value("${external.api.url}") String apiUrl) {
+        RestAssured.baseURI = apiUrl;
+        logger.info(" Base Service created with URL = " +apiUrl);
     }
-
     public Response getRequest(String endpoint) {
         return RestAssured.get(endpoint);
     }

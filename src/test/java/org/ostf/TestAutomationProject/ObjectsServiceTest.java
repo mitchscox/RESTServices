@@ -1,10 +1,12 @@
 package org.ostf.TestAutomationProject;
 
+
 import io.restassured.response.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.Comparator;
@@ -12,26 +14,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@SpringBootTest
 public class ObjectsServiceTest {
-    Logger logger = LogManager.getLogger();
-    private ObjectsService objectsService;
 
-    @BeforeClass
-    public void setup() {
-        objectsService = new ObjectsService();
+    @Autowired
+    private final ObjectsService objectsService;
+    Logger logger = LogManager.getLogger();
+
+    @Autowired
+    public ObjectsServiceTest(ObjectsService objectsService) {
+        this.objectsService = objectsService;
+        logger.info("Objects Test Service in object service created = " + objectsService.toString());
+        logger.info("Retrieved data: " + objectsService.getAllObjects().body().prettyPrint());
     }
-    // TODO remove additional assertion comments when done with validation logic
+
+
     // TODO configure hardcoding of string ids from 1 to phone object model
-    // TODO get logging into surefire test reports
     // TODO move response retrival and json parsing to setup function
     @Test
     public void testGetAllObjects() {
         Response response = objectsService.getAllObjects();
-        logger.debug("Response Code : "+ response.getStatusCode());
-        logger.debug("Object Data Type : " + response.getContentType());
+        logger.info("testGetAllObjects Response Code : "+ response.getStatusCode());
+        logger.info("testGetAllObjects Object Data Type : " + response.getContentType());
 
-        // why is this below logger statement printing to info and above?
-        // logger.debug("Data body : " + response.body().prettyPrint());
         Assert.assertEquals(response.getStatusCode(), 200);
 
     }
@@ -59,10 +64,10 @@ public class ObjectsServiceTest {
     }
     @Test
     public void testGetPhoneWithLowestPrice() {
-        // Get the response
+
         Response response = objectsService.getAllObjects();
 
-        // Convert response to JSON data
+
         List<Map<String, Object>> jsonData = response.jsonPath().getList("$");
 
         Optional<String> lowestPricePhone = jsonData.stream()
@@ -76,10 +81,10 @@ public class ObjectsServiceTest {
     }
     @Test
     public void testAllIdsAreNotNull() {
-        // Get the response
+
         Response response = objectsService.getAllObjects();
 
-        // Convert response to JSON data
+
         List<Map<String, Object>> jsonData = response.jsonPath().getList("$");
 
         boolean allIdsNotNull = jsonData.stream()
@@ -89,7 +94,7 @@ public class ObjectsServiceTest {
 
         Assert.assertTrue(allIdsNotNull, "All ID fields should be non-null.");
     }
-    /*
+
     @Test
     public void testGetObjectById() {
         String id = "1"; // Replace with a valid ID
@@ -127,5 +132,5 @@ public class ObjectsServiceTest {
         // Additional assertions based on response content
     }
 
-     */
+
 }

@@ -67,7 +67,6 @@ public class ObjectsServiceTest {
 
         Response response = objectsService.getAllObjects();
 
-
         List<Map<String, Object>> jsonData = response.jsonPath().getList("$");
 
         Optional<String> lowestPricePhone = jsonData.stream()

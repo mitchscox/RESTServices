@@ -54,18 +54,6 @@
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
             Get rid of the maven slf4j error, not sure why its not picking up log4j -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>2.0.13</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>2.0.13</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
     <build>
         <plugins>

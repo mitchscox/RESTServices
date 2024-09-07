@@ -32,6 +32,11 @@ pipeline {
         sh 'mvn test'
       }
     }
+    stage('Generate test Report') {
+          steps {
+            sh 'mvn surefire-report:report'
+          }
+        }
 
   }
 }

@@ -15,7 +15,7 @@
               <option value="validate" />
               <option value="compile" />
               <option value="test" />
-              <option value="surefire-report:report" />
+              <option value="surefire-report:report-only" />
             </list>
           </option>
           <option name="multimoduleDir" />

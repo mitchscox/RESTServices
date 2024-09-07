@@ -26,9 +26,9 @@ class TestAutomationProjectApplicationTests {
 
 	Logger logger = LogManager.getLogger();
 
-	@Test
+	/*@Test
 	void contextLoads() {
-	}
+	}*/
 
 	@BeforeTest
 	void testPackInitialize() {

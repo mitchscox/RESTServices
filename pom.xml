@@ -53,8 +53,12 @@
             <artifactId>groovy</artifactId>
             <version>3.0.22</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
-            Get rid of the maven slf4j error, not sure why its not picking up log4j -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>4.0.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -74,6 +78,7 @@
                 <artifactId>maven-surefire-report-plugin</artifactId>
                 <version>3.5.0</version>
             </plugin>
+
 
             <plugin>
                 <groupId>org.springframework.boot</groupId>

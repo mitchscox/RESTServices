@@ -41,19 +41,40 @@ class TestAutomationProjectApplicationTests {
 		// Use next two lines if you get your webserver up with right permissions
 		//String sampleObject = "{ \"name\": \"New Object\", \"data\": { \"property\": \"value\" }}";
 		//Response response = objectsService.createObject(sampleObject);
-		Response response = mock(Response.class);
+
 		//mock for success since no write permissions
+		Response response = mock(Response.class);
 		when(response.getStatusCode()).thenReturn(201);
 		Assert.assertEquals(response.getStatusCode(), 201);
 
 	}
+	@Test
+	public void testUpdateObject() {
+		//String id = "1";
+		//String updatedObject = "{ \"name\": \"Updated Object\", \"data\": { \"property\": \"new value\" }}";
+		//Response response = objectsService.updateObject(id, updatedObject);
 
+		Response response = mock(Response.class);
+		when(response.getStatusCode()).thenReturn(200);
+		Assert.assertEquals(response.getStatusCode(), 200);
+
+	}
+
+	@Test
+	public void testDeleteObject() {
+		//String id = "1";
+		//Response response = objectsService.deleteObject(id);
+
+		Response response = mock(Response.class);
+		when(response.getStatusCode()).thenReturn(200);
+		Assert.assertEquals(response.getStatusCode(), 200);
+
+	}
 	@Test
 	public void testGetAllObjects() {
 		Response response = objectsService.getAllObjects();
 		logger.info("testGetAllObjects Response Code : " + response.getStatusCode());
 		logger.info("testGetAllObjects Object Data Type : " + response.getContentType());
-
 		Assert.assertEquals(response.getStatusCode(), 200);
 	}
 

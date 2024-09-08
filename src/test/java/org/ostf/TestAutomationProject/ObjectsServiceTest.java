@@ -104,11 +104,10 @@ public class ObjectsServiceTest {
 
     @Test
     public void testCreateObject() {
-        // Create a sample object to post
         String sampleObject = "{ \"name\": \"New Object\", \"data\": { \"property\": \"value\" }}";
         Response response = objectsService.createObject(sampleObject);
         Assert.assertEquals(response.getStatusCode(), 201);
-        // Additional assertions based on response content
+
     }
 
     // TODO while not relevant update properties to object model phone for updating

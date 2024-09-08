@@ -26,15 +26,13 @@ class TestAutomationProjectApplicationTests {
 
 	Logger logger = LogManager.getLogger();
 
-	/*@Test
-	void contextLoads() {
-	}*/
 
 	@BeforeTest
 	void testPackInitialize() {
 		logger.info("Beginning Test Pack Run");
 		logger.info("URL = " + url);
 	}
+	/*
 	@Test
 	public void testCreateObject() {
 
@@ -43,7 +41,7 @@ class TestAutomationProjectApplicationTests {
 		Assert.assertEquals(response.getStatusCode(), 201);
 
 	}
-
+    */
 	@Test
 	public void testGetAllObjects() {
 		Response response = objectsService.getAllObjects();

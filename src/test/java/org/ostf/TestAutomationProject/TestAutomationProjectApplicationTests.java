@@ -86,12 +86,14 @@ class TestAutomationProjectApplicationTests {
 		Assert.assertEquals(response.getStatusCode(), 200);
 	}
 
+	// Should update the next test case phone
+
 	@Test
 	public void testGetAllApplePhones() throws IOException {
 		List<Product> products = loadJsonData();
 		List<String> applePhoneNames = products.stream()
 				.map(Product::getName)
-				.filter(name -> name.startsWith("Apple iPhone"))
+				.filter(name -> name.contains("Apple iPhone"))
 				.toList();
 
 		applePhoneNames.forEach(name -> logger.info("Apple Phone: {}", name));
@@ -105,7 +107,7 @@ class TestAutomationProjectApplicationTests {
 	}
 
 	@Test
-	public void testGetPhoneWithLowestPrice() throws IOException {
+	public void testGetDeviceWithLowestPrice() throws IOException {
 		List<Product> products = loadJsonData();
 
 		Optional<String> lowestPricePhone = products.stream()
@@ -125,5 +127,29 @@ class TestAutomationProjectApplicationTests {
 		logger.info("All IDs are non-null: {}", allIdsNotNull);
 
 		Assert.assertTrue(allIdsNotNull, "All ID fields should be non-null.");
+	}
+	@Value("#{'${phones}'.split(',')}")
+	private List<String> phoneNames;
+	@Test
+	public void testGetLowestPricedPhone() throws IOException {
+		// Load all products
+		List<Product> products = loadJsonData();
+
+		// Filter products where name starts with any of the injected phone names
+		Optional<Product> lowestPricedProduct = products.stream()
+				.filter(product -> {
+					String name = product.getName();
+					// Check if the product name starts with any of the names from the injected list
+					return phoneNames.stream().anyMatch(name::startsWith);
+				})
+				.filter(product -> product.getData() != null && product.getData().getPrice() != null)
+				.min(Comparator.comparing(product -> product.getData().getPrice()));
+
+		Assert.assertTrue(lowestPricedProduct.isPresent(), "No product found with the specified names.");
+
+		lowestPricedProduct.ifPresent(product -> {
+			logger.info("Lowest Priced Phone: {}", product.getName());
+			logger.info("Price: {}", product.getData().getPrice());
+		});
 	}
 }

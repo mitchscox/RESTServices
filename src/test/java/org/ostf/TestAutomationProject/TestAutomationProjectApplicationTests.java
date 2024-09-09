@@ -24,8 +24,6 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 class TestAutomationProjectApplicationTests {
 
-	@Value("${external.api.url}")
-	String url;
 
 	@Autowired
 	private ObjectsService objectsService;

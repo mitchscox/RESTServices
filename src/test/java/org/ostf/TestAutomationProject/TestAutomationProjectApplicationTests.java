@@ -4,12 +4,12 @@ import io.restassured.response.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Assumptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.testng.Assert;
-import org.testng.annotations.BeforeTest;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -35,58 +35,54 @@ class TestAutomationProjectApplicationTests {
 
 	Logger logger = LogManager.getLogger();
 
-	@BeforeTest
-	void testPackInitialize() {
-		logger.info("Beginning Test Pack Run");
-		logger.info("URL = " + url);
+	private boolean smokeTestsPassed = true;
+
+	@BeforeEach
+	void checkSmokeTestsStatus() {
+		Assumptions.assumeTrue(smokeTestsPassed, "Skipping non-smoke tests since a smoke test has failed.");
 	}
 
 	@Test
+	@Tag("smoke")
 	public void testCreateObject() {
-		//Product product = new Product("1", "New Product", new Product.ProductData("Black", "64 GB", null, null, null, null, null, null, null, null, null));
-
-		// Use this if webserver is set up with right permissions
-		// Response response = objectsService.createObject(product);
-
-		// Mock for success since no write permissions
 		Response response = mock(Response.class);
 		when(response.getStatusCode()).thenReturn(201);
-		Assert.assertEquals(response.getStatusCode(), 201);
+		boolean passed = response.getStatusCode() == 201;
+		if (!passed) smokeTestsPassed = false;
+		org.junit.jupiter.api.Assertions.assertEquals(201, response.getStatusCode());
 	}
 
 	@Test
+	@Tag("smoke")
 	public void testUpdateObject() {
-		//Product updatedProduct = new Product("1", "Updated Product", new Product.ProductData("Blue", "128 GB", null, null, null, null, null, null, null, null, null));
-
-		// Use this if webserver is set up with right permissions
-		// Response response = objectsService.updateObject("1", updatedProduct);
-
-		// Mock for success
 		Response response = mock(Response.class);
 		when(response.getStatusCode()).thenReturn(200);
-		Assert.assertEquals(response.getStatusCode(), 200);
+		boolean passed = response.getStatusCode() == 200;
+		if (!passed) smokeTestsPassed = false;
+		org.junit.jupiter.api.Assertions.assertEquals(200, response.getStatusCode());
 	}
 
 	@Test
+	@Tag("smoke")
 	public void testDeleteObject() {
-		// String id = "1";
-		// Response response = objectsService.deleteObject(id);
-
-		// Mock for success
 		Response response = mock(Response.class);
 		when(response.getStatusCode()).thenReturn(200);
-		Assert.assertEquals(response.getStatusCode(), 200);
+		boolean passed = response.getStatusCode() == 200;
+		if (!passed) smokeTestsPassed = false;
+		org.junit.jupiter.api.Assertions.assertEquals(200, response.getStatusCode());
 	}
 
 	@Test
+	@Tag("smoke")
 	public void testGetAllObjects() {
 		Response response = objectsService.getAllObjects();
 		logger.info("testGetAllObjects Response Code : " + response.getStatusCode());
-		logger.info("testGetAllObjects Object Data Type : " + response.getContentType());
-		Assert.assertEquals(response.getStatusCode(), 200);
+		boolean passed = response.getStatusCode() == 200;
+		if (!passed) smokeTestsPassed = false;
+		org.junit.jupiter.api.Assertions.assertEquals(200, response.getStatusCode());
 	}
 
-	// Should update the next test case phone
+	// The following tests will be skipped if any of the above smoke tests fail
 
 	@Test
 	public void testGetAllApplePhones() throws IOException {
@@ -97,13 +93,7 @@ class TestAutomationProjectApplicationTests {
 				.toList();
 
 		applePhoneNames.forEach(name -> logger.info("Apple Phone: {}", name));
-		Assert.assertFalse(applePhoneNames.isEmpty(), "There should be at least one Apple phone.");
-	}
-
-	private List<Product> loadJsonData() throws IOException {
-		Response response = objectsService.getAllObjects();
-		String jsonResponse = response.body().asString();
-		return objectMapper.readValue(jsonResponse, new TypeReference<List<Product>>() {});
+		org.junit.jupiter.api.Assertions.assertFalse(applePhoneNames.isEmpty(), "There should be at least one Apple phone.");
 	}
 
 	@Test
@@ -116,7 +106,7 @@ class TestAutomationProjectApplicationTests {
 				.map(Product::getName);
 
 		lowestPricePhone.ifPresent(name -> logger.info("Lowest Price Device: {}", name));
-		Assert.assertTrue(lowestPricePhone.isPresent(), "There should be at least one phone with a price.");
+		org.junit.jupiter.api.Assertions.assertTrue(lowestPricePhone.isPresent(), "There should be at least one phone with a price.");
 	}
 
 	@Test
@@ -126,30 +116,35 @@ class TestAutomationProjectApplicationTests {
 		boolean allIdsNotNull = products.stream().allMatch(product -> product.getId() != null);
 		logger.info("All IDs are non-null: {}", allIdsNotNull);
 
-		Assert.assertTrue(allIdsNotNull, "All ID fields should be non-null.");
+		org.junit.jupiter.api.Assertions.assertTrue(allIdsNotNull, "All ID fields should be non-null.");
 	}
+
 	@Value("#{'${phones}'.split(',')}")
 	private List<String> phoneNames;
+
 	@Test
 	public void testGetLowestPricedPhone() throws IOException {
-		// Load all products
 		List<Product> products = loadJsonData();
 
-		// Filter products where name starts with any of the injected phone names
 		Optional<Product> lowestPricedProduct = products.stream()
 				.filter(product -> {
 					String name = product.getName();
-					// Check if the product name starts with any of the names from the injected list
 					return phoneNames.stream().anyMatch(name::startsWith);
 				})
 				.filter(product -> product.getData() != null && product.getData().getPrice() != null)
 				.min(Comparator.comparing(product -> product.getData().getPrice()));
 
-		Assert.assertTrue(lowestPricedProduct.isPresent(), "No product found with the specified names.");
+		org.junit.jupiter.api.Assertions.assertTrue(lowestPricedProduct.isPresent(), "No product found with the specified names.");
 
 		lowestPricedProduct.ifPresent(product -> {
 			logger.info("Lowest Priced Phone: {}", product.getName());
 			logger.info("Price: {}", product.getData().getPrice());
 		});
+	}
+
+	private List<Product> loadJsonData() throws IOException {
+		Response response = objectsService.getAllObjects();
+		String jsonResponse = response.body().asString();
+		return objectMapper.readValue(jsonResponse, new TypeReference<List<Product>>() {});
 	}
 }

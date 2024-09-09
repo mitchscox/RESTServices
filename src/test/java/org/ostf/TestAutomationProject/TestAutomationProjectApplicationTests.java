@@ -127,7 +127,7 @@ class TestAutomationProjectApplicationTests {
 		Optional<Product> lowestPricedProduct = products.stream()
 				.filter(product -> {
 					String name = product.getName();
-					return phoneNames.stream().anyMatch(name::startsWith);
+					return phoneNames.stream().anyMatch(name::contains);
 				})
 				.filter(product -> product.getData() != null && product.getData().getPrice() != null)
 				.min(Comparator.comparing(product -> product.getData().getPrice()));

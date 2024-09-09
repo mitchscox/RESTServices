@@ -101,7 +101,7 @@ public class ObjectsServiceTest {
         Assert.assertEquals(response.getStatusCode(), 200);
         // Additional assertions based on response content
     }
-
+      /*
     @Test
     public void testCreateObject() {
         String sampleObject = "{ \"name\": \"New Object\", \"data\": { \"property\": \"value\" }}";
@@ -129,5 +129,5 @@ public class ObjectsServiceTest {
         Assert.assertEquals(response.getStatusCode(), 200);
 
     }
-
+   */
 }

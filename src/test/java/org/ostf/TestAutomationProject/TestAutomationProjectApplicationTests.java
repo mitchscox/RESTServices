@@ -10,9 +10,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import static org.mockito.Mockito.mock;
@@ -27,6 +30,9 @@ class TestAutomationProjectApplicationTests {
 	@Autowired
 	private ObjectsService objectsService;
 
+	@Autowired
+	private ObjectMapper objectMapper;
+
 	Logger logger = LogManager.getLogger();
 
 	@BeforeTest
@@ -37,39 +43,41 @@ class TestAutomationProjectApplicationTests {
 
 	@Test
 	public void testCreateObject() {
+		//Product product = new Product("1", "New Product", new Product.ProductData("Black", "64 GB", null, null, null, null, null, null, null, null, null));
 
-		// Use next two lines if you get your webserver up with right permissions
-		//String sampleObject = "{ \"name\": \"New Object\", \"data\": { \"property\": \"value\" }}";
-		//Response response = objectsService.createObject(sampleObject);
+		// Use this if webserver is set up with right permissions
+		// Response response = objectsService.createObject(product);
 
-		//mock for success since no write permissions
+		// Mock for success since no write permissions
 		Response response = mock(Response.class);
 		when(response.getStatusCode()).thenReturn(201);
 		Assert.assertEquals(response.getStatusCode(), 201);
-
 	}
+
 	@Test
 	public void testUpdateObject() {
-		//String id = "1";
-		//String updatedObject = "{ \"name\": \"Updated Object\", \"data\": { \"property\": \"new value\" }}";
-		//Response response = objectsService.updateObject(id, updatedObject);
+		//Product updatedProduct = new Product("1", "Updated Product", new Product.ProductData("Blue", "128 GB", null, null, null, null, null, null, null, null, null));
 
+		// Use this if webserver is set up with right permissions
+		// Response response = objectsService.updateObject("1", updatedProduct);
+
+		// Mock for success
 		Response response = mock(Response.class);
 		when(response.getStatusCode()).thenReturn(200);
 		Assert.assertEquals(response.getStatusCode(), 200);
-
 	}
 
 	@Test
 	public void testDeleteObject() {
-		//String id = "1";
-		//Response response = objectsService.deleteObject(id);
+		// String id = "1";
+		// Response response = objectsService.deleteObject(id);
 
+		// Mock for success
 		Response response = mock(Response.class);
 		when(response.getStatusCode()).thenReturn(200);
 		Assert.assertEquals(response.getStatusCode(), 200);
-
 	}
+
 	@Test
 	public void testGetAllObjects() {
 		Response response = objectsService.getAllObjects();
@@ -79,10 +87,10 @@ class TestAutomationProjectApplicationTests {
 	}
 
 	@Test
-	public void testGetAllApplePhones() {
-		List<Map<String, Object>> jsonData = loadJsonData();
-		List<String> applePhoneNames = jsonData.stream()
-				.map(obj -> (String) obj.get("name"))
+	public void testGetAllApplePhones() throws IOException {
+		List<Product> products = loadJsonData();
+		List<String> applePhoneNames = products.stream()
+				.map(Product::getName)
 				.filter(name -> name.startsWith("Apple iPhone"))
 				.toList();
 
@@ -90,31 +98,30 @@ class TestAutomationProjectApplicationTests {
 		Assert.assertFalse(applePhoneNames.isEmpty(), "There should be at least one Apple phone.");
 	}
 
-	private List<Map<String, Object>> loadJsonData() {
+	private List<Product> loadJsonData() throws IOException {
 		Response response = objectsService.getAllObjects();
-		return response.jsonPath().getList("$");
+		String jsonResponse = response.body().asString();
+		return objectMapper.readValue(jsonResponse, new TypeReference<List<Product>>() {});
 	}
 
 	@Test
-	public void testGetPhoneWithLowestPrice() {
-		Response response = objectsService.getAllObjects();
-		List<Map<String, Object>> jsonData = response.jsonPath().getList("$");
+	public void testGetPhoneWithLowestPrice() throws IOException {
+		List<Product> products = loadJsonData();
 
-		Optional<String> lowestPricePhone = jsonData.stream()
-				.filter(obj -> obj.get("data") != null && ((Map<String, Object>) obj.get("data")).get("price") != null)
-				.min(Comparator.comparing(obj -> ((Number) ((Map<String, Object>) obj.get("data")).get("price")).doubleValue()))
-				.map(obj -> (String) obj.get("name"));
+		Optional<String> lowestPricePhone = products.stream()
+				.filter(product -> product.getData() != null && product.getData().getPrice() != null)
+				.min(Comparator.comparing(product -> product.getData().getPrice()))
+				.map(Product::getName);
 
 		lowestPricePhone.ifPresent(name -> logger.info("Lowest Price Device: {}", name));
 		Assert.assertTrue(lowestPricePhone.isPresent(), "There should be at least one phone with a price.");
 	}
 
 	@Test
-	public void testAllIdsAreNotNull() {
-		Response response = objectsService.getAllObjects();
-		List<Map<String, Object>> jsonData = response.jsonPath().getList("$");
+	public void testAllIdsAreNotNull() throws IOException {
+		List<Product> products = loadJsonData();
 
-		boolean allIdsNotNull = jsonData.stream().allMatch(obj -> obj.get("id") != null);
+		boolean allIdsNotNull = products.stream().allMatch(product -> product.getId() != null);
 		logger.info("All IDs are non-null: {}", allIdsNotNull);
 
 		Assert.assertTrue(allIdsNotNull, "All ID fields should be non-null.");

@@ -43,7 +43,7 @@ class TestAutomationProjectApplicationTests {
 	}
 
 	@Test
-	public void testGetDeviceWithLowestPrice() throws IOException {
+	public void testGetLowestPriceProduct() throws IOException {
 		logger.info("Executing test to get lowest cost device");
 		List<Product> products = loadJsonData();
 

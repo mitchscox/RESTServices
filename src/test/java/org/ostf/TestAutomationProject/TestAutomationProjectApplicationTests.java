@@ -4,9 +4,6 @@ import io.restassured.response.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Assumptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,12 +15,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 @SpringBootTest
 class TestAutomationProjectApplicationTests {
-
 
 	@Autowired
 	private ObjectsService objectsService;
@@ -33,58 +26,11 @@ class TestAutomationProjectApplicationTests {
 
 	Logger logger = LogManager.getLogger();
 
-	private boolean smokeTestsPassed = true;
-
-	@BeforeEach
-	void checkSmokeTestsStatus() {
-		logger.info ("Smoke test status = " +smokeTestsPassed);
-		Assumptions.assumeTrue(smokeTestsPassed, "Skipping non-smoke tests since a smoke test has failed.");
-	}
-
-	@Test
-	@Tag("smoke")
-	public void testCreateObject() {
-		Response response = mock(Response.class);
-		when(response.getStatusCode()).thenReturn(201);
-		boolean passed = response.getStatusCode() == 201;
-		if (!passed) smokeTestsPassed = false;
-		org.junit.jupiter.api.Assertions.assertEquals(201, response.getStatusCode());
-	}
-
-	@Test
-	@Tag("smoke")
-	public void testUpdateObject() {
-		Response response = mock(Response.class);
-		when(response.getStatusCode()).thenReturn(200);
-		boolean passed = response.getStatusCode() == 200;
-		if (!passed) smokeTestsPassed = false;
-		org.junit.jupiter.api.Assertions.assertEquals(200, response.getStatusCode());
-	}
-
-	@Test
-	@Tag("smoke")
-	public void testDeleteObject() {
-		Response response = mock(Response.class);
-		when(response.getStatusCode()).thenReturn(200);
-		boolean passed = response.getStatusCode() == 200;
-		if (!passed) smokeTestsPassed = false;
-		org.junit.jupiter.api.Assertions.assertEquals(200, response.getStatusCode());
-	}
-
-	@Test
-	@Tag("smoke")
-	public void testGetAllObjects() {
-		Response response = objectsService.getAllObjects();
-		logger.info("testGetAllObjects Response Code : " + response.getStatusCode());
-		boolean passed = response.getStatusCode() == 200;
-		if (!passed) smokeTestsPassed = false;
-		org.junit.jupiter.api.Assertions.assertEquals(200, response.getStatusCode());
-	}
-
 	// The following tests will be skipped if any of the above smoke tests fail
 
 	@Test
 	public void testGetAllApplePhones() throws IOException {
+		// If we expand the use case to say "get all Samsung phones" we should make this a configurable item
 		logger.info("Executing test to retrieve only Apple iPhones");
 		List<Product> products = loadJsonData();
 		List<String> applePhoneNames = products.stream()
@@ -92,7 +38,7 @@ class TestAutomationProjectApplicationTests {
 				.filter(name -> name.contains("Apple iPhone"))
 				.toList();
 
-		applePhoneNames.forEach(name -> logger.info("Apple Phone: {}", name));
+		applePhoneNames.forEach(name -> logger.info("Apple iPhone: {}", name));
 		org.junit.jupiter.api.Assertions.assertFalse(applePhoneNames.isEmpty(), "There should be at least one Apple phone.");
 	}
 

@@ -70,8 +70,8 @@
                     <useFile>true</useFile>
                     <printSummary>true</printSummary>
                     <includes>
-                        <include>**/TestAutomationProjectApplicationTests.class</include>
-                        <!--include>**/OtherTestSuite.class</include-->
+                        <include>**/TestAutomationProjectSmokeTests.java</include>
+                        <include>**/TestAutomationProjectApplicationTests.java</include>
                     </includes>
                 </configuration>
             </plugin>

@@ -37,6 +37,7 @@ class TestAutomationProjectApplicationTests {
 
 	@BeforeEach
 	void checkSmokeTestsStatus() {
+		logger.info ("Smoke test status = " +smokeTestsPassed);
 		Assumptions.assumeTrue(smokeTestsPassed, "Skipping non-smoke tests since a smoke test has failed.");
 	}
 
@@ -84,6 +85,7 @@ class TestAutomationProjectApplicationTests {
 
 	@Test
 	public void testGetAllApplePhones() throws IOException {
+		logger.info("Executing test to retrieve only Apple iPhones");
 		List<Product> products = loadJsonData();
 		List<String> applePhoneNames = products.stream()
 				.map(Product::getName)
@@ -96,6 +98,7 @@ class TestAutomationProjectApplicationTests {
 
 	@Test
 	public void testGetDeviceWithLowestPrice() throws IOException {
+		logger.info("Executing test to get lowest cost device");
 		List<Product> products = loadJsonData();
 
 		Optional<String> lowestPricePhone = products.stream()
@@ -109,11 +112,11 @@ class TestAutomationProjectApplicationTests {
 
 	@Test
 	public void testAllIdsAreNotNull() throws IOException {
+		logger.info("Executing test to check all ID fields are Not Null");
 		List<Product> products = loadJsonData();
 
 		boolean allIdsNotNull = products.stream().allMatch(product -> product.getId() != null);
 		logger.info("All IDs are non-null: {}", allIdsNotNull);
-
 		org.junit.jupiter.api.Assertions.assertTrue(allIdsNotNull, "All ID fields should be non-null.");
 	}
 
@@ -122,6 +125,7 @@ class TestAutomationProjectApplicationTests {
 
 	@Test
 	public void testGetLowestPricedPhone() throws IOException {
+		logger.info("Executing test to get lowest price phone :`");
 		List<Product> products = loadJsonData();
 
 		Optional<Product> lowestPricedProduct = products.stream()

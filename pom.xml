@@ -69,6 +69,10 @@
                 <configuration>
                     <useFile>true</useFile>
                     <printSummary>true</printSummary>
+                    <includes>
+                        <include>**/TestAutomationProjectApplicationTests.class</include>
+                        <!--include>**/OtherTestSuite.class</include-->
+                    </includes>
                 </configuration>
             </plugin>
 

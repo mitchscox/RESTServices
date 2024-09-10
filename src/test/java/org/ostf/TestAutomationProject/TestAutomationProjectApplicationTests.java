@@ -26,7 +26,6 @@ class TestAutomationProjectApplicationTests {
 
 	Logger logger = LogManager.getLogger();
 
-	// The following tests will be skipped if any of the above smoke tests fail
 
 	@Test
 	public void testGetAllApplePhones() throws IOException {

@@ -16,7 +16,7 @@ public class BaseService {
 
     public BaseService(@Value("${external.api.url}") String apiUrl) {
         RestAssured.baseURI = apiUrl;
-        logger.info(" Base Service created with URL = " +apiUrl);
+        logger.info(" Base Service instance created with URL = " +apiUrl);
     }
     public Response getRequest(String endpoint) {
         return RestAssured.get(endpoint);

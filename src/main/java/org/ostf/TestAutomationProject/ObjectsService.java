@@ -3,7 +3,6 @@ package org.ostf.TestAutomationProject;
 import io.restassured.response.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,7 +14,8 @@ public class ObjectsService {
     private final BaseService baseService;
     private final ObjectMapper objectMapper;
 
-    @Autowired
+    //@Autowired
+    // autowiring unnecessary as declaring a constructor
     public ObjectsService(BaseService baseService, ObjectMapper objectMapper) {
         this.baseService = baseService;
         this.objectMapper = objectMapper;

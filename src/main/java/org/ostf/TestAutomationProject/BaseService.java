@@ -1,6 +1,5 @@
 package org.ostf.TestAutomationProject;
 
-
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.apache.logging.log4j.LogManager;

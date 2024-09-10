@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class ObjectsService {
     Logger logger = LogManager.getLogger();
+    // TODO below endpoint needs to go into application.properties
     private final String endpoint = "objects";
     private final BaseService baseService;
     private final ObjectMapper objectMapper;
@@ -23,9 +24,9 @@ public class ObjectsService {
         try {
             String response = baseService.getRequest(endpoint).body().asString();
             Product[] products = objectMapper.readValue(response, Product[].class);
-            logger.info("Object Service Data Set: " + products);
+            logger.info("Object Service set created");
         } catch (JsonProcessingException e) {
-            logger.error("Failed to process JSON response", e);
+            logger.error("Failed to parse json: ", e);
         }
     }
 

@@ -27,16 +27,17 @@ pipeline {
       }
     }
 
-    stage('Execute tests') {
+    stage('Smoke tests') {
       steps {
-        sh 'mvn test'
+        sh 'mvn -Dtest=TestAutomationProjectSmokeTests test'
       }
     }
+
     stage('Generate test Report') {
-          steps {
-            sh 'mvn surefire-report:report'
-          }
-        }
+      steps {
+        sh 'mvn surefire-report:report'
+      }
+    }
 
   }
 }

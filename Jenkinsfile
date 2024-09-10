@@ -33,9 +33,10 @@ pipeline {
       }
     }
 
-    stage('Generate test Report') {
+    stage('Application tests') {
       steps {
-        sh 'mvn surefire-report:report'
+        sh '''
+mvn -Dtest=TestAutomationProjectApplicationTests test'''
       }
     }
 

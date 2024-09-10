@@ -44,7 +44,7 @@ public class ObjectsService {
             return baseService.postRequest(endpoint, productJson);
         } catch (JsonProcessingException e) {
             logger.error("Failed to serialize Product object", e);
-            return null; // or handle the error appropriately
+            return null; // This could be handled better
         }
     }
 
@@ -54,7 +54,7 @@ public class ObjectsService {
             return baseService.putRequest(endpoint + "/" + id, productJson);
         } catch (JsonProcessingException e) {
             logger.error("Failed to serialize Product object", e);
-            return null; // or handle the error appropriately
+            return null; // This too same as above
         }
     }
 

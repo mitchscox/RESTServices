@@ -40,5 +40,11 @@ mvn -Dtest=TestAutomationProjectApplicationTests test'''
       }
     }
 
+    stage('Generate Test Report') {
+      steps {
+        sh 'mvn surefire-report:report'
+      }
+    }
+
   }
 }

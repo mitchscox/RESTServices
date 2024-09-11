@@ -50,13 +50,11 @@ public class Product {
         // 2 different colors for two different devices
         @JsonProperty("Color")
         private String Color;
-
         private String color;
 
+        // Again a problem with case sensitivity,
         @JsonProperty("Capacity")
         private String Capacity;
-
-
         @JsonProperty("capacity")
         private String capacity;
         @JsonProperty("Price")
@@ -83,6 +81,7 @@ public class Product {
 
         public ProductData() {}
 
+        // TODO This model needs refactoring somehow, perhaps with dynamic JSon parsing or some such
         public ProductData(Map<String, Object> dataMap) {
             this.Color = (String) dataMap.get("Color");
             this.color = (String) dataMap.get("color");

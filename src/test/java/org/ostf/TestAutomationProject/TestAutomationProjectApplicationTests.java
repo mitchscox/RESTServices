@@ -16,16 +16,31 @@ import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
-class TestAutomationProjectApplicationTests {
+public class TestAutomationProjectApplicationTests {
 
-	@Autowired
-	private ObjectsService objectsService;
-
-	@Autowired
-	private ObjectMapper objectMapper;
+	private final ObjectsService objectsService;
+	private final ObjectMapper objectMapper;
+	private final List<String> phoneNames;
 
 	Logger logger = LogManager.getLogger();
 
+	// Constructor to initialize objects with injected values
+	public TestAutomationProjectApplicationTests(
+			@Value("${external.api.url}") String apiUrl,
+			@Value("${objects.api.endpoint}") String endpoint,
+			@Value("#{'${phones}'.split(',')}") List<String> phoneNames) {
+		// Initialize ObjectMapper manually
+		this.objectMapper = new ObjectMapper();
+
+		// Initialize BaseService and pass it to ObjectsService with apiUrl from properties
+		BaseService baseService = new BaseService(apiUrl);
+
+		// Pass the endpoint manually when creating ObjectsService
+		this.objectsService = new ObjectsService(baseService, endpoint);
+
+		// Set phoneNames from the property
+		this.phoneNames = phoneNames;
+	}
 
 	@Test
 	public void testGetAllApplePhones() throws IOException {
@@ -65,8 +80,6 @@ class TestAutomationProjectApplicationTests {
 		org.junit.jupiter.api.Assertions.assertTrue(allIdsNotNull, "All ID fields should be non-null.");
 	}
 
-	@Value("#{'${phones}'.split(',')}")
-	private List<String> phoneNames;
 
 	@Test
 	public void testGetLowestPricedPhone() throws IOException {

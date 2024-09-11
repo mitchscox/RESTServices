@@ -1,4 +1,6 @@
 package org.ostf.TestAutomationProject;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
 public class Product {
@@ -42,25 +44,55 @@ public class Product {
 
 
     public static class ProductData {
+        @JsonProperty("capacity GB")
         private String capacityGB;
+
+        // 2 different colors for two different devices
+        @JsonProperty("Color")
+        private String Color;
+
         private String color;
+
+        @JsonProperty("Capacity")
+        private String Capacity;
+
+
+        @JsonProperty("capacity")
         private String capacity;
+        @JsonProperty("Price")
+        private String Price;
+
         private Double price;
         private String generation;
         private Integer year;
+        @JsonProperty("CPU model")
         private String cpuModel;
+        @JsonProperty("Hard disk size")
         private String hardDiskSize;
+        @JsonProperty("Strap Colour")
         private String strapColour;
+        @JsonProperty("Case Size")
         private String caseSize;
+        @JsonProperty("Description")
         private String description;
+        @JsonProperty("Screen size")
         private Double screenSize;
+        @JsonProperty("Generation")
+        private String Generation;
 
 
         public ProductData() {}
 
         public ProductData(Map<String, Object> dataMap) {
+            this.Color = (String) dataMap.get("Color");
             this.color = (String) dataMap.get("color");
+
+            this.Price = (String) dataMap.get("Price");
+
+            this.Generation = (String) dataMap.get("Generation");
+
             this.capacity = (String) dataMap.get("capacity");
+            this.Capacity = (String) dataMap.get("Capacity");
             this.capacityGB = (String) dataMap.get("capacity GB");
 
             //this.price = dataMap.get("price") != null ? Float.parseFloat(dataMap.get("price").toString()) : null;

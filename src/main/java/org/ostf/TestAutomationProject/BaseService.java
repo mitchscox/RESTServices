@@ -7,35 +7,47 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class BaseService {
 
     Logger logger = LogManager.getLogger();
 
+    private final String apiUrl;
+
+
     public BaseService(@Value("${external.api.url}") String apiUrl) {
-        RestAssured.baseURI = apiUrl;
-        logger.info(" Base Service instance created with URL = " +apiUrl);
+        this.apiUrl = apiUrl;
+        RestAssured.baseURI = apiUrl;  // Set RestAssured base URL
+        logger.info("Base Service instance created with base URL = {}", apiUrl);
     }
+
+
     public Response getRequest(String endpoint) {
-        return RestAssured.get(endpoint);
+        logger.info("Making GET request to endpoint: {}", apiUrl + endpoint);
+        return RestAssured.get(apiUrl + endpoint);  // Ensure correct URL construction
     }
+
 
     public Response postRequest(String endpoint, Object body) {
+        logger.info("Making POST request to endpoint: {}", apiUrl + endpoint);
         return RestAssured.given()
                 .contentType("application/json")
                 .body(body)
-                .post(endpoint);
+                .post(apiUrl + endpoint);
     }
+
 
     public Response putRequest(String endpoint, Object body) {
+        logger.info("Making PUT request to endpoint: {}", apiUrl + endpoint);
         return RestAssured.given()
                 .contentType("application/json")
                 .body(body)
-                .put(endpoint);
+                .put(apiUrl + endpoint);
     }
 
+
     public Response deleteRequest(String endpoint) {
-        return RestAssured.delete(endpoint);
+        logger.info("Making DELETE request to endpoint: {}", apiUrl + endpoint);
+        return RestAssured.delete(apiUrl + endpoint);
     }
 }

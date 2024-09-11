@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Assumptions;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -17,11 +17,19 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 public class TestAutomationProjectSmokeTests {
 
-    @Autowired
-    private ObjectsService objectsService;
+    private final ObjectsService objectsService;
+    private final ObjectMapper objectMapper;
+    private BaseService baseService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    public TestAutomationProjectSmokeTests(@Value("${external.api.url}") String apiUrl,
+                                           @Value("${objects.api.endpoint}") String endpoint
+
+    ) {
+
+        this.objectMapper = new ObjectMapper();
+        this.baseService = new BaseService(apiUrl);
+        this.objectsService = new ObjectsService(baseService, endpoint);
+    }
 
     Logger logger = LogManager.getLogger();
 

@@ -4,7 +4,6 @@ import io.restassured.response.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -24,21 +23,16 @@ public class TestAutomationProjectApplicationTests {
 
 	Logger logger = LogManager.getLogger();
 
-	// Constructor to initialize objects with injected values
+
 	public TestAutomationProjectApplicationTests(
 			@Value("${external.api.url}") String apiUrl,
 			@Value("${objects.api.endpoint}") String endpoint,
 			@Value("#{'${phones}'.split(',')}") List<String> phoneNames) {
-		// Initialize ObjectMapper manually
+
 		this.objectMapper = new ObjectMapper();
-
-		// Initialize BaseService and pass it to ObjectsService with apiUrl from properties
 		BaseService baseService = new BaseService(apiUrl);
-
-		// Pass the endpoint manually when creating ObjectsService
 		this.objectsService = new ObjectsService(baseService, endpoint);
 
-		// Set phoneNames from the property
 		this.phoneNames = phoneNames;
 	}
 

@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . /app
 
 # Build the application (assuming it's a Maven project)
-RUN ./mvnw clean package
+RUN ./mvn clean package
 
 # Make port 8080 available to the world outside this container
 EXPOSE 8080

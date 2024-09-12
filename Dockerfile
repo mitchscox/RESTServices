@@ -11,10 +11,11 @@ WORKDIR /app
 COPY . /app
 
 # Build the application
-RUN mvn clean package
+RUN mvn package
 
-# Make port 8080 available to the world outside this container
+# Make port 8080 and 80 available to the world outside this container
 EXPOSE 8080
+EXPOSE 80
 
 # Run the jar file (assumes jar file is in target directory after build)
-CMD ["java", "-jar", "target/TestAutomationProjectApplication.jar"]
+CMD ["java", "-jar", "target/TestAutomationProject-1.0-SNAPSHOT.jar"]

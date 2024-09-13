@@ -1,0 +1,15 @@
+
+
+services:
+  app:
+    image: testautomationproject # Reference to the Docker image you built
+    build:
+      context: .
+      dockerfile: Dockerfile
+      #network_mode: "host"  # Add this line
+    ports:
+      - "8080:8080"
+      - "80"
+    environment:
+      SPRING_PROFILES_ACTIVE: "docker" # You can add more environment variables here if needed
+    restart: always # Automatic   ally restart the container if it crashes

@@ -7,15 +7,18 @@ RUN apk add --no-cache maven
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
+# Copy the pom.xml first and download dependencies
+COPY pom.xml /app
+RUN mvn dependency:go-offline -B
+
+# Copy the entire project
 COPY . /app
 
 # Build the application
-RUN mvn package
+RUN mvn clean package
 
-# Make port 8080 and 80 available to the world outside this container
+# Make port 8080 available to the world outside this container
 EXPOSE 8080
-EXPOSE 80
 
-# Run the jar file (assumes jar file is in target directory after build)
+# Run the jar file (adjust the target path as needed)
 CMD ["java", "-jar", "target/TestAutomationProject-1.0-SNAPSHOT.jar"]

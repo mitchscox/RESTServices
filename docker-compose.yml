@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      #network_mode: "host"  # Add this line
+    network_mode: "host"  # Add this line
     ports:
       - "8080:8080"
       - "80"
